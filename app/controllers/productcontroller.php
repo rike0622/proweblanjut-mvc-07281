@@ -5,6 +5,10 @@ class ProductController {
     private $model;
     private $uploadDir;
 
+    public function getAll() {
+        return $this->model->getAll();
+    }
+    
     public function __construct($db) {
         $this->model = new Product($db);
         // Path absolut ke folder uploads agar tidak error di manapun script dijalankan
