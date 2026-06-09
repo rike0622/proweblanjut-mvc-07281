@@ -1,0 +1,17 @@
+# Upload files
+assets/uploads/*
+!assets/uploads/.gitkeep
+
+# System files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Log files
+*.log
+php_errors.log
+
+# Database backup (optional)
+*.sql
+backup*.sql
