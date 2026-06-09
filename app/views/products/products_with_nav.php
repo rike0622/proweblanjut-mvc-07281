@@ -181,8 +181,10 @@
                         <td>Rp <?= number_format($p['harga'], 0, ',', '.') ?></td>
                         <td><span class="badge <?= $badgeClass ?>"><?= $p['stok'] ?></span></td>
                         <td>
+                        <td>
                             <a href="index.php?page=products&action=edit&id=<?= $p['id'] ?>" class="btn btn-edit">Edit</a>
-                            <a href="index.php?page=products&action=delete&id=<?= $p['id'] ?>" 
+                            <a href="index.php?page=products&action=delete&id=<?= $p['id'] ?>" class="btn btn-del" onclick="return confirm('Yakin hapus?')">Hapus</a>
+                        </td>
                                class="btn btn-del" 
                                onclick="return confirm('Yakin hapus?')">Hapus</a>
                         </td>
