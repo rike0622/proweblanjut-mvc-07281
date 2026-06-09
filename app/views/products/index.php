@@ -3,196 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Produk - MVC</title>
+    <title>Daftar Produk - Inventaris MVC</title>
     <style>
         :root {
-            --bg-color: #f1f5f9;
-            --card-bg: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
-            --radius: 12px;
+            --primary: #4F46E5;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --bg: #F3F4F6;
+            --card: #FFFFFF;
+            --text: #1F2937;
+            --text-light: #6B7280;
+            --border: #E5E7EB;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-            background: var(--bg-color);
-            color: var(--text-main);
-            padding: 2rem 1rem;
-            line-height: 1.5;
-        }
+        body { font-family: 'Inter', 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 1.75rem;
-        }
+        .navbar { background: var(--card); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+        .brand { font-size: 1.25rem; font-weight: 700; color: var(--primary); text-decoration: none; }
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--text-light); font-weight: 500; }
+        .nav-links a:hover { color: var(--primary); }
+        .btn-logout { background: var(--danger); color: white; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; text-decoration: none; font-size: 0.85rem; }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
+        .card { background: var(--card); padding: 2rem; border-radius: 12px; border: 1px solid var(--border); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .header h2 { font-size: 1.5rem; font-weight: 700; }
+        .btn-add { background: var(--success); color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 600; }
+        .btn-add:hover { opacity: 0.9; }
 
-        .header h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-main);
-        }
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 1rem; background: var(--bg); font-size: 0.8rem; color: var(--text-light); text-transform: uppercase; border-bottom: 2px solid var(--border); }
+        td { padding: 1rem; border-bottom: 1px solid var(--border); }
+        tr:hover { background: #f9fafb; }
 
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.6rem 1.1rem;
-            font-size: 0.875rem;
-            font-weight: 600;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            border: none;
-            cursor: pointer;
-        }
+        img { width: 50px; height: 50px; object-fit: cover; border-radius: 8px; }
+        .badge { padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .badge-ok { background: #ECFDF5; color: #065F46; }
+        .badge-warn { background: #FEF3C7; color: #92400E; }
 
-        .btn-add { background: var(--success); color: #fff; }
-        .btn-add:hover { background: #059669; transform: translateY(-1px); }
+        .btn { padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-block; }
+        .btn-edit { background: var(--warning); color: white; }
+        .btn-del { background: var(--danger); color: white; margin-left: 0.5rem; }
 
-        .btn-edit { background: var(--warning); color: #fff; }
-        .btn-edit:hover { background: #d97706; }
-
-        .btn-del { background: var(--danger); color: #fff; }
-        .btn-del:hover { background: #dc2626; }
-
-        .table-wrapper {
-            overflow-x: auto;
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 650px;
-        }
-
-        th, td {
-            padding: 0.9rem 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-            vertical-align: middle;
-        }
-
-        th {
-            background: #f8fafc;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
-            white-space: nowrap;
-        }
-
-        tbody tr { transition: background 0.15s ease; }
-        tbody tr:hover { background: #f8fafc; }
-        tbody tr:last-child td { border-bottom: none; }
-
-        td img {
-            width: 56px;
-            height: 56px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            display: block;
-        }
-
-        .actions { display: flex; gap: 0.5rem; }
-
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.6rem;
-            border-radius: 999px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        .badge-safe { background: #d1fae5; color: #065f46; }
-        .badge-warn { background: #fef3c7; color: #92400e; }
-        .badge-crit { background: #fee2e2; color: #991b1b; }
-
-        .empty {
-            text-align: center;
-            padding: 2.5rem 1rem;
-            color: var(--text-muted);
-        }
-
-        @media (max-width: 768px) {
-            .container { padding: 1.25rem; }
-            .header { flex-direction: column; align-items: flex-start; }
-            th, td { padding: 0.75rem 0.6rem; font-size: 0.85rem; }
-            td img { width: 48px; height: 48px; }
-        }
+        .alert { padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; }
+        .alert-success { background: #D1FAE5; color: #065F46; }
+        .alert-error { background: #FEE2E2; color: #991B1B; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h2> Daftar Produk (MVC)</h2>
-        <a href="index.php?action=create" class="btn btn-add">+ Tambah Produk</a>
+<nav class="navbar">
+    <a href="index.php?page=dashboard" class="brand">📦 Inventaris MVC</a>
+    <div class="nav-links">
+        <a href="index.php?page=dashboard">Dashboard</a>
+        <a href="index.php?page=products" style="color: var(--primary);">Produk</a>
+        <span>👤 <?= htmlspecialchars($_SESSION['user_name'] ?? 'User') ?></span>
+        <a href="index.php?page=logout" class="btn-logout">Logout</a>
     </div>
+</nav>
 
-    <div class="table-wrapper">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Gambar</th>
-                    <th>Nama Produk</th>
-                    <th>Harga</th>
-                    <th>Stok</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (!empty($data)): ?>
-                    <?php foreach ($data as $p): 
-                        $badgeClass = $p['stok'] < 10 ? 'badge-crit' : ($p['stok'] < 30 ? 'badge-warn' : 'badge-safe');
-                    ?>
+<div class="container">
+    <div class="card">
+        <?php if (isset($_SESSION['success'])): ?>
+            <div class="alert alert-success"><?= htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?></div>
+        <?php endif; ?>
+        
+        <?php if (isset($_SESSION['error'])): ?>
+            <div class="alert alert-error"><?= htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?></div>
+        <?php endif; ?>
+
+        <div class="header">
+            <h2>📦 Daftar Produk</h2>
+            <a href="index.php?page=products&action=create" class="btn-add">+ Tambah Produk</a>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
                     <tr>
-                        <td style="font-weight:500; color:var(--text-muted);">#<?= htmlspecialchars($p['id']) ?></td>
-                        <td>
-                            <?php if (!empty($p['gambar'])): ?>
-                                <img src="../assets/uploads/<?= htmlspecialchars($p['gambar']) ?>" alt="Produk">
-                            <?php else: ?>
-                                <div style="width:56px;height:56px;background:#f1f5f9;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:11px;">No Img</div>
-                            <?php endif; ?>
-                        </td>
-                        <td style="font-weight:500;"><?= htmlspecialchars($p['nama_produk']) ?></td>
-                        <td>Rp <?= number_format($p['harga'], 0, ',', '.') ?></td>
-                        <td><span class="badge <?= $badgeClass ?>"><?= $p['stok'] ?></span></td>
-                        <td>
-                            <div class="actions">
-                                <a href="index.php?action=edit&id=<?= $p['id'] ?>" class="btn btn-edit">Edit</a>
-                                <a href="index.php?action=delete&id=<?= $p['id'] ?>" class="btn btn-del" onclick="return confirm('Yakin ingin menghapus produk ini?')">Hapus</a>
-                            </div>
-                        </td>
+                        <th>ID</th>
+                        <th>Gambar</th>
+                        <th>Nama Produk</th>
+                        <th>Harga</th>
+                        <th>Stok</th>
+                        <th>Terjual</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
                     </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr><td colspan="6" class="empty">Belum ada data produk. Silakan tambahkan data baru.</td></tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php if (!empty($data)): ?>
+                        <?php foreach ($data as $p): 
+                            $statusClass = ($p['stok'] ?? 0) < 10 ? 'badge-warn' : 'badge-ok';
+                            $statusText = ($p['stok'] ?? 0) < 10 ? 'Stok Rendah' : 'Tersedia';
+                        ?>
+                        <tr>
+                            <td>#<?= htmlspecialchars($p['id']) ?></td>
+                            <td>
+                                <?php if (!empty($p['gambar'])): ?>
+                                    <img src="../assets/uploads/<?= htmlspecialchars($p['gambar']) ?>" alt="Produk">
+                                <?php else: ?>
+                                    <div style="width:50px;height:50px;background:#f3f4f6;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#9ca3af;font-size:11px;">No Img</div>
+                                <?php endif; ?>
+                            </td>
+                            <td><strong><?= htmlspecialchars($p['nama_produk']) ?></strong></td>
+                            <td>Rp <?= number_format($p['harga'], 0, ',', '.') ?></td>
+                            <td><?= $p['stok'] ?></td>
+                            <td><?= $p['terjual'] ?? 0 ?></td>
+                            <td><span class="badge <?= $statusClass ?>"><?= $statusText ?></span></td>
+                            <td>
+                                <a href="index.php?page=products&action=edit&id=<?= $p['id'] ?>" class="btn btn-edit">Edit</a>
+                                <a href="index.php?page=products&action=delete&id=<?= $p['id'] ?>" class="btn btn-del" onclick="return confirm('Yakin ingin menghapus produk ini?')">Hapus</a>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="8" style="text-align: center; padding: 3rem; color: var(--text-light);">
+                                <div style="font-size: 3rem; margin-bottom: 1rem;">📭</div>
+                                <p>Belum ada data produk.</p>
+                                <a href="index.php?page=products&action=create" style="color: var(--primary); text-decoration: none; font-weight: 600; margin-top: 1rem; display: inline-block;">+ Tambah Produk Pertama</a>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
